@@ -1,4 +1,4 @@
-from ast import Delete
+#from ast import Delete
 import tkinter as tk
 from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
@@ -10,7 +10,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import matplotlib.pyplot as plt
 
-import asyncio
 
 from irspectra import *
 from fitwindow import *
