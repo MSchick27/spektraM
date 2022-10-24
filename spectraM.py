@@ -4,6 +4,8 @@ from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 
 import numpy as np
+from scipy import optimize as opt
+from scipy import signal
 import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib.figure import Figure
@@ -227,7 +229,7 @@ class plotwindow:
                                           title = "Open Files") 
                 jsonfile = open(str(filename),'r')
                 jsondict = json.load(jsonfile)
-                print(jsondict)
+                #print(jsondict)
                 #statustask.configure(text='json imported',fg='red')
                 statusbox.insert(0, 'json imported')
 
@@ -300,6 +302,37 @@ class plotwindow:
             
             def change_res(les):
                 scales.configure(resolution= scales_res.get())
+
+            def findpeaks(data):
+                x = list(jsondict[data]['xdata'])
+                y = list(jsondict[data]['ydata'])
+                num = int(jsondict[data]['subplot'])
+                bgdatakey = jsondict[data]['bgkey']
+
+                if jsondict[data]['bg'] == True:
+                    xbg= list(jsondict[bgdatakey]['xdata'])
+                    ybg= list(jsondict[bgdatakey]['ydata'])
+                    scale = float(jsondict[data]['bgscale'])
+                    x,y = substract_bg(x,y,xbg,ybg,scale)
+                
+                yarr = np.array(y)
+                #print(y)
+                peaks,_ = signal.find_peaks(yarr,prominence=0.0005)#height=0.001)
+                print(peaks,_)
+                xpeaks = []
+                ypeaks = []
+                for item in peaks:
+                    xpeaks.append(x[item])
+                    ypeaks.append(y[item]*1000)
+                
+                print(ypeaks)
+                for c in range(len(xpeaks)):
+                    self.ax[num].text(xpeaks[c],ypeaks[c],s=str(round(xpeaks[c],4))+'\n',size=10)
+                self.ax[num].scatter(xpeaks,ypeaks,marker='x',color='r')
+                self.canvas.draw()
+
+
+
 
             def export_data(data):
                 a = filedialog.asksaveasfilename(initialdir = dirpath,title = "Save file")#,filetypes = (("textfiles", "*.txt*"))) 
@@ -668,6 +701,9 @@ class plotwindow:
                 
               
 #last. row---------------------------------------------------------
+                peakbutton = tk.Button(data_frame,text='Peaks', bg='grey25',borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=245,y=200)
+
+
                 global ftype,fitname
                 fitdata = tk.Button(data_frame,text='FIT', bg='grey25',borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=245,y=230)
                 ftype = tk.StringVar()
