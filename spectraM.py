@@ -1,6 +1,6 @@
 #from ast import Delete
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 
 import numpy as np
@@ -34,7 +34,13 @@ class plotwindow:
         root1.configure(background='grey25')
         plotwindow.init_toolbar(self)
         plotwindow.init_plotframe(self)
-        
+
+        def on_closing():
+            if tk.messagebox.askokcancel("Quit", "Do you want to quit?"):
+                plt.close()
+                root1.destroy()
+
+        root1.protocol("WM_DELETE_WINDOW", on_closing)
         root1.mainloop()
 
 
