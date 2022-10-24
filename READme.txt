@@ -23,3 +23,5 @@ Press Button and press twice on the canvas to set ax-limits
 Confirm points with left or middle mouse button
 Right click deletes points
 
+Author:
+Maximilian Schick
