@@ -25,3 +25,11 @@ Right click deletes points
 
 Author:
 Maximilian Schick
+
+pyinstaller --noconfirm --onefile --windowed 
+--icon "PATH logo.ico" 
+--add-data "PATH spektraM/fitwindow:fitwindow/" 
+--add-data "PATH spektraM/initval:initval/" 
+--add-data "PATH irspectra:irspectra/" 
+--add-data "PATH spektraM/pics:pics/" 
+"/Users/mschick/Desktop/Bachelor/AKB/Python Projects/spektraM/spectraM.py"
