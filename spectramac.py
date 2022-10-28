@@ -1,6 +1,5 @@
 #from ast import Delete
 import tkinter as tk
-#import tkmacosx as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 
@@ -49,11 +48,11 @@ class plotwindow:
 
     def init_plotframe(self): 
         self.mframe = tk.Frame(root1)
-        self.mframe.config(background='grey25')
+        self.mframe.config(background='red')
 
         figure, self.ax = plt.subplots(2,1,gridspec_kw={'height_ratios': [2, 1]},figsize=(12,8))
         self.canvas = FigureCanvasTkAgg(figure, master= root1)#self.mframe)
-        self.canvas.get_tk_widget().place(x=420,y=35,width=900,height=600)
+        self.canvas.get_tk_widget().place(x=400,y=35,width=900,height=600)
         toolbar = NavigationToolbar2Tk(self.canvas,self.mframe)
         toolbar.pack(side=tk.TOP, fill=tk.BOTH) 
 
@@ -117,7 +116,7 @@ class plotwindow:
 
     def init_toolbar(self):
         global statusbox
-        self.toolframe = tk.Frame(root1, borderwidth=2, relief="ridge",bg='grey20', width=400)#
+        self.toolframe = tk.Frame(root1, borderwidth=2, relief="ridge", width=400)#
         tk.Label(self.toolframe,text='Toolbar:',font=('Arial',11),fg='white',bg='grey25',width = 55).place(x=0,y=0)
 
         #statustask = tk.Label(self.toolframe ,text='root',font=('Courier',10),bg ='white',fg='black',width=60,height=2)
@@ -515,56 +514,56 @@ class plotwindow:
 
 
         def buttonset():
-            plotbutton =tk.Button(self.toolframe,image=PLOTT,borderwidth=0 ,fg='white',bg='grey25',command=buttoncommands.plotplot).place(x=10,y=20)
-            clearbutton =tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
-            axisbutton = tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
+            plotbutton =tk.Button(self.toolframe,image=PLOTT,borderwidth=0 ,bg='grey25',command=buttoncommands.plotplot).place(x=10,y=20)
+            clearbutton =tk.Button(self.toolframe,bg='grey25',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
+            axisbutton = tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
             #trailsbutton =tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='trails', command=buttoncommands.trails).place(x=280,y=200)
-            loadjson = tk.Button(self.toolframe,bg='grey25',fg='white',font=('Arial',10),borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
-            loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=280)
-            deldata = tk.Button(self.toolframe,image=washer, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=280)
-            exjson = tk.Button(self.toolframe,image=export, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=280)
+            loadjson = tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
+            loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=280)
+            deldata = tk.Button(self.toolframe,image=washer, bg='grey25',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=280)
+            exjson = tk.Button(self.toolframe,image=export, bg='grey25',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=280)
         
         def inputset():
             global xlow,xhigh,ylow,yhigh
             global xlabel,ylabel,titleentry, ymulti
             global gridbox,delimiteropt,delimitervar
 
-            tk.Label(self.toolframe,bg='grey25',text='x:',font=('Arial',10),fg='white').place(x=10,y=100)
-            xlow = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',10))
+            tk.Label(self.toolframe,bg='grey25',text='x:',font=('Arial',11),fg='white').place(x=10,y=100)
+            xlow = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',11))
             xlow.insert(0,float(init_dict['xlow']))
             xlow.place(x=25,y=110)
-            xhigh = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',10))
+            xhigh = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',11))
             xhigh.insert(0,float(init_dict['xhigh']))
             xhigh.place(x=25,y=90)
 
-            xlabel = tk.Entry(self.toolframe,bg='black',width=20,borderwidth=0,font=('Arial',10))
+            xlabel = tk.Entry(self.toolframe,bg='black',width=20,borderwidth=0,font=('Arial',11))
             xlabel.insert(1,str(init_dict['xlabel']))
             xlabel.place(x=10,y=130)
 
 
-            tk.Label(self.toolframe,bg='grey25',text='y:',font=('Arial',10),fg='white').place(x=160,y=100)
-            ylow = tk.Entry(self.toolframe,bg='black',fg='white',width=12,borderwidth=0,font=('Arial',10))
+            tk.Label(self.toolframe,bg='grey25',text='y:',font=('Arial',11),fg='white').place(x=160,y=100)
+            ylow = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',11))
             ylow.insert(0,float(init_dict['ylow']))
             ylow.place(x=200,y=110)
-            yhigh = tk.Entry(self.toolframe,bg='black',fg='white',width=12,borderwidth=0,font=('Arial',10))
+            yhigh = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',11))
             yhigh.insert(0,float(init_dict['yhigh']))
             yhigh.place(x=200,y=90)
 
-            ylabel = tk.Entry(self.toolframe,bg='black',fg='white',width=20,borderwidth=0,font=('Arial',10))
+            ylabel = tk.Entry(self.toolframe,bg='black',width=20,borderwidth=0,font=('Arial',11))
             ylabel.insert(-1,str(init_dict['ylabel']))
             ylabel.place(x=200,y=130)
 
-            tk.Label(self.toolframe,bg='grey25',text='y_fac:',font=('Arial',10),fg='white').place(x=160,y=150)
-            ymulti = tk.Entry(self.toolframe,bg='black',fg='white',width=12,borderwidth=0,font=('Arial',10))
+            tk.Label(self.toolframe,bg='grey25',text='y_fac:',font=('Arial',11),fg='white').place(x=160,y=150)
+            ymulti = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',11))
             ymulti.insert(-1,str(init_dict['ymulti']))
             ymulti.place(x=200,y=150)
 
-            titleentry = tk.Entry(self.toolframe,bg='black',fg='white',width=20,borderwidth=0,font=('Arial',10))
+            titleentry = tk.Entry(self.toolframe,bg='black',width=20,borderwidth=0,font=('Arial',11))
             titleentry.insert(0,'Title')
             titleentry.place(x=10,y=65)
 
 
-            tk.Label(self.toolframe,bg='grey25',fg='white',text='Grid:',font=('Arial',10)).place(x=10,y=160)
+            tk.Label(self.toolframe,bg='grey25',text='Grid:',font=('Arial',11),fg='white').place(x=10,y=160)
             gridbox = tk.BooleanVar()
             tk.Checkbutton(self.toolframe,variable=gridbox,bg='grey20').place(x=45,y=157)
 
@@ -572,7 +571,7 @@ class plotwindow:
             delimiteroptions = ['tab','space',',',';']
             delimitervar.set(delimiteroptions[0])
             delimiteropt = tk.OptionMenu(self.toolframe, delimitervar, *delimiteroptions)
-            delimiteropt.config(width=3,font=('Arial',10),bg='grey25',fg='white')
+            delimiteropt.config(width=3)
             delimiteropt.place(x=280,y=305)
 
         class scrollframe:
@@ -616,7 +615,7 @@ class plotwindow:
             def data_set(dataname):
                 print('i will setup the frame for:'+str(dataname))
                 global data_frame
-                data_frame = tk.Frame(container,bg='grey25')
+                data_frame = tk.Frame(container)
                 data_frame.place(x= 0,y=0,width=398,height=340)
                 
                 global col
@@ -631,9 +630,9 @@ class plotwindow:
                 global showbox, datalabelentry, subplotnum
 
                 #SETUP für SHOW checkbox
-                tk.Label(data_frame,text='Show:',font=('Arial',10),bg='grey25',fg='white').place(x=10,y=10)
+                tk.Label(data_frame,bg='grey20',text='Show:',font=('Arial',11),fg='white').place(x=10,y=10)
                 showbox = tk.BooleanVar()
-                showcheckbutton = tk.Checkbutton(data_frame,onvalue=True,offvalue=False,variable=showbox,bg='grey25',command=lambda:scrollframe.change_json(dataname))
+                showcheckbutton = tk.Checkbutton(data_frame,onvalue=True,offvalue=False,variable=showbox,bg='grey20',command=lambda:scrollframe.change_json(dataname))
                 showcheckbutton.place(x=40,y=8)
                 #print(jsondict[str(dataname)])
                 if jsondict[str(dataname)]['show'] == True:
@@ -644,8 +643,8 @@ class plotwindow:
                     showcheckbutton.deselect()
 
                 #Setup für den LABEL ENTRY
-                tk.Label(data_frame,bg='grey25',text='Label:',font=('Arial',10),fg='white').place(x=70,y=10)
-                datalabelentry = tk.Entry(data_frame,bg='black',font=('Arial',10),fg='white',width=15,borderwidth=0)
+                tk.Label(data_frame,bg='grey20',text='Label:',font=('Arial',11),fg='white').place(x=70,y=10)
+                datalabelentry = tk.Entry(data_frame,bg='black',width=15,borderwidth=0,font=('Arial',11))
                 datalabelentry.insert(0,str(jsondict[str(dataname)]['label']))
                 datalabelentry.place(x=115,y=10)
 
@@ -654,18 +653,18 @@ class plotwindow:
                 subplotnum.set(subplotnumoptions[int(jsondict[str(dataname)]['subplot'])])
                 subplotopt = tk.OptionMenu(data_frame, subplotnum, *subplotnumoptions)
                 #subplotopt.config(width=1)
-                subplotopt.config(font=('Arial',10),bg='grey25',fg='white')
+                subplotopt.config(font=('Arial',11))
                 subplotopt.place(x=10,y=55,width=30)
 
-                labelchangebutton = tk.Button(data_frame,text='->', bg='grey25',fg='white',font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
+                labelchangebutton = tk.Button(data_frame,text='->', bg='grey25',borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
 
 #2. row---------------------------------------------------------
                 global bgbox,bgkeyentry, scales, scales_res
 
                 #SETUP für BG checkbox
-                tk.Label(data_frame,bg='grey25',text='Bg:',font=('Arial',10),fg='white').place(x=10,y=30)
+                tk.Label(data_frame,bg='grey20',text='Bg:',font=('Arial',11),fg='white').place(x=10,y=30)
                 bgbox = tk.BooleanVar()
-                bgcheckbutton = tk.Checkbutton(data_frame,onvalue=True,offvalue=False,variable=bgbox,bg='grey25',command=lambda:scrollframe.change_json(dataname))
+                bgcheckbutton = tk.Checkbutton(data_frame,onvalue=True,offvalue=False,variable=bgbox,bg='grey20',command=lambda:scrollframe.change_json(dataname))
                 bgcheckbutton.place(x=40,y=30)
                 if jsondict[str(dataname)]['bg'] == True:
                     bgbox.set(True)
@@ -674,16 +673,16 @@ class plotwindow:
                     bgbox.set(False)
                     bgcheckbutton.deselect()
 
-                tk.Label(container,bg='grey25',text='Bg key:',font=('Arial',10),fg='white').place(x=70,y=30)
-                bgkeyentry = tk.Entry(data_frame,bg='black',width=15,borderwidth=0,font=('Arial',10),fg='white')
+                tk.Label(container,bg='grey20',text='Bg key:',font=('Arial',11),fg='white').place(x=70,y=30)
+                bgkeyentry = tk.Entry(data_frame,bg='black',width=15,borderwidth=0,font=('Arial',11))
                 bgkeyentry.insert(0,str(jsondict[str(dataname)]['bgkey']))
                 bgkeyentry.place(x=115,y=30)
 
                 res = tk.OptionMenu(data_frame, scales_res, *RES_LIST,command=lambda:buttoncommands.change_res('var'))
-                res.config(width=2,bg='grey25',fg='white',font=('Arial',10))
+                res.config(width=2)
                 res.place(x=235,y=30)
 
-                scales = tk.Scale(data_frame,orient='horizontal',bg="grey25",font=('Arial',10),from_= -0.5, to=1.6,resolution=scales_res.get(),length =90,width=10,sliderlength=20,fg='sky blue')
+                scales = tk.Scale(data_frame,orient='horizontal',bg='grey25',from_= -0.5, to=1.6,resolution=scales_res.get(),length =90,width=10,sliderlength=20,font=('Courier',10),fg='sky blue')
                 scales.set(float(jsondict[str(dataname)]['bgscale']))
                 scales.bind("<ButtonRelease-1>",scrollframe.change_json(dataname))
                 scales.place(x=225,y=55)
@@ -691,43 +690,43 @@ class plotwindow:
 
 #3. row---------------------------------------------------------
                 colopt = tk.OptionMenu(data_frame, col, *coloptions)#,command=lambda:scrollframe.change_json(dataname))
-                colopt.config(font=('Arial',10),bg='grey25',fg='white')
+                colopt.config(font=('Arial',11))
                 colopt.place(x=55,y=55,width=60)
 
                 lineopt = tk.OptionMenu(data_frame, line, *lineoptions)#,command=lambda:scrollframe.change_json(dataname))
+                lineopt.config(bg="grey20", fg="WHITE")
                 lineopt["menu"].config(fg="RED")
-                lineopt.config(bg="grey25", fg="white",font=('Arial',10))
-                lineopt.place(x=130,y=55,width=60)
+                lineopt.config(font=('Arial',11))
+                lineopt.place(x=120,y=55,width=50)
                 
               
 #last. row---------------------------------------------------------
-                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=255,y=200)
+                peakbutton = tk.Button(data_frame,text='Peaks', bg='grey25',borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=245,y=200)
 
 
                 global ftype,fitname
-                fitdata = tk.Button(data_frame,text='FIT',bg="grey25", fg="white",font=('Arial',10) ,borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
+                fitdata = tk.Button(data_frame,text='FIT', bg='grey25',borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=245,y=230)
                 ftype = tk.StringVar()
                 ftypeoptions = ['Gauss','Lorentz']
                 ftype.set(ftypeoptions[0])
                 ftypeopt = tk.OptionMenu(data_frame, ftype, *ftypeoptions)
-                ftypeopt.config(bg='grey25',fg='white',font=('Arial',10))
                 ftypeopt.place(x=165,y=232,width=70)
-                fitname = tk.Entry(data_frame,bg="grey25", fg="white",font=('Arial',10),width = 15)
+                fitname = tk.Entry(data_frame,width = 15)
                 fitname.place(x=10,y=230)
 
                 global polyentry, waveentry
-                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
-                tk.Label(data_frame,bg="grey25", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
-                polyentry = tk.Entry(data_frame,bg='black',fg='white',width=3,borderwidth=0,font=('Arial',10))
-                polyentry.insert(0, '5')
+                polyfitdata = tk.Button(data_frame,text='polyFIT', bg='grey25',borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=220,y=255)
+                tk.Label(data_frame,bg='grey20',text='Polyfit deg:',font=('Arial',11),fg='white').place(x=130,y=259)
+                polyentry = tk.Entry(data_frame,bg='black',width=3,borderwidth=0,font=('Arial',11))
+                polyentry.insert(0, '4')
                 polyentry.place(x=190,y=259)
 
                 #polymanfitdata = tk.Button(data_frame,text='pol-man', bg='grey25',borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=220,y=280)
-                waveentry = tk.Entry(data_frame,bg='black',fg='white',width=16,borderwidth=0,font=('Arial',10))
+                waveentry = tk.Entry(data_frame,bg='black',width=16,borderwidth=0,font=('Arial',11))
                 waveentry.insert(0, '')
                 waveentry.place(x=10,y=259)
 
-                exportdata = tk.Button(data_frame,text='export', bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=240,y=90)
+                exportdata = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=240,y=90)
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
 
             def change_json(dataname):
@@ -758,4 +757,3 @@ class plotwindow:
 #%%Initiation
 
 plotwindow()
-
