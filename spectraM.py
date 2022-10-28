@@ -1,6 +1,6 @@
 #from ast import Delete
-import tkinter as tk
-#import tkmacosx as tk
+#import tkinter as tk
+import tkmacosx as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 
@@ -159,31 +159,6 @@ class plotwindow:
             def test():
                 print('click')
 
-            def trails():
-                dict={
-                    'bsp_data': {'xdata': [],
-                        'ydata': [],
-                        'bg_xdata':[],
-                        'bg_ydata':[],
-                        'show': True,       #default
-                        'color': 'black',    #default
-                        'linewidth': 0.9     #default
-                                },
-                    'bsp_dat32': {'xdata': [],
-                        'ydata': [],
-                        'bg_xdata':[],
-                        'bg_ydata':[],
-                        'show': False,       #default
-                        'color': 'black',    #default
-                        'linewidth': 0.9     #default
-                                },
-                    'bsp_data3':''}
-
-                file = open('spectra_physics.json','w')
-                json.dump(dict, file)
-                file.close()
-                print('trails')
-
             def plotplot():
                 scrollframe.change_json(datalistbox)
                 plotwindow.plot(self)
@@ -285,6 +260,11 @@ class plotwindow:
                             }
 
                 
+                counter=0
+                while dataname in jsondict:
+                    counter = counter+1
+                    dataname = str(dataname + str(counter))
+
                 jsondict[str(dataname)]= dataset
                 listbox.insert(tk.END, dataname)
 
@@ -404,8 +384,15 @@ class plotwindow:
                             'label':str('Polyfit') ,
                             'subplot': 0         
                             }
-                    jsondict[str(str(data)+'_polyfit')] = polyset
-                    listbox.insert(tk.END, str(str(data)+'_polyfit'))
+                    
+                    datapol = str(data+'_polyfit')
+                    counter=0
+                    while datapol in jsondict:
+                        counter = counter+1
+                        datapol = str(datapol + str(counter))
+
+                    jsondict[datapol] = polyset
+                    listbox.insert(tk.END, datapol)
                     
                     doubledset = {'xdata': xdatapoly,
                             'ydata': ydatad ,
@@ -419,8 +406,15 @@ class plotwindow:
                             'label':str('Data for substraktion') ,
                             'subplot': 0         
                             }
-                    jsondict[str(str(data)+'_data')] = doubledset
-                    listbox.insert(tk.END, str(str(data)+'_data'))
+                    
+                    datadub = str(data+'_data')
+                    counter=0
+                    while datadub in jsondict:
+                        counter = counter+1
+                        datadub = str(datadub + str(counter))
+
+                    jsondict[datadub] = doubledset
+                    listbox.insert(tk.END, datadub)
                     
 
 
@@ -515,11 +509,11 @@ class plotwindow:
 
 
         def buttonset():
-            plotbutton =tk.Button(self.toolframe,image=PLOTT,borderwidth=0 ,fg='white',bg='grey25',command=buttoncommands.plotplot).place(x=10,y=20)
+            plotbutton =tk.Button(self.toolframe,image=PLOTT,borderwidth=0 ,fg='skyblue',bg='grey25',command=buttoncommands.plotplot).place(x=10,y=20)
             clearbutton =tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
-            axisbutton = tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
+            axisbutton = tk.Button(self.toolframe,bg='grey25',fg='darkred',borderwidth=0,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
             #trailsbutton =tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='trails', command=buttoncommands.trails).place(x=280,y=200)
-            loadjson = tk.Button(self.toolframe,bg='grey25',fg='white',font=('Arial',10),borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
+            loadjson = tk.Button(self.toolframe,bg='grey25',fg='darkred',font=('Arial',10),borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
             loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=280)
             deldata = tk.Button(self.toolframe,image=washer, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=280)
             exjson = tk.Button(self.toolframe,image=export, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=280)
@@ -657,7 +651,7 @@ class plotwindow:
                 subplotopt.config(font=('Arial',10),bg='grey25',fg='white')
                 subplotopt.place(x=10,y=55,width=30)
 
-                labelchangebutton = tk.Button(data_frame,text='->', bg='grey25',fg='white',font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
+                labelchangebutton = tk.Button(data_frame,text='->', bg='grey25',fg='darkred',font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
 
 #2. row---------------------------------------------------------
                 global bgbox,bgkeyentry, scales, scales_res
@@ -692,31 +686,31 @@ class plotwindow:
 #3. row---------------------------------------------------------
                 colopt = tk.OptionMenu(data_frame, col, *coloptions)#,command=lambda:scrollframe.change_json(dataname))
                 colopt.config(font=('Arial',10),bg='grey25',fg='white')
-                colopt.place(x=55,y=55,width=60)
+                colopt.place(x=60,y=55,width=70)
 
                 lineopt = tk.OptionMenu(data_frame, line, *lineoptions)#,command=lambda:scrollframe.change_json(dataname))
                 lineopt["menu"].config(fg="RED")
                 lineopt.config(bg="grey25", fg="white",font=('Arial',10))
-                lineopt.place(x=130,y=55,width=60)
+                lineopt.place(x=140,y=55,width=70)
                 
               
 #last. row---------------------------------------------------------
-                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=255,y=200)
+                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
 
 
                 global ftype,fitname
-                fitdata = tk.Button(data_frame,text='FIT',bg="grey25", fg="white",font=('Arial',10) ,borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
+                fitdata = tk.Button(data_frame,text='FIT',bg="grey25", fg="darkred",font=('Arial',10) ,borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
                 ftype = tk.StringVar()
                 ftypeoptions = ['Gauss','Lorentz']
                 ftype.set(ftypeoptions[0])
                 ftypeopt = tk.OptionMenu(data_frame, ftype, *ftypeoptions)
                 ftypeopt.config(bg='grey25',fg='white',font=('Arial',10))
                 ftypeopt.place(x=165,y=232,width=70)
-                fitname = tk.Entry(data_frame,bg="grey25", fg="white",font=('Arial',10),width = 15)
+                fitname = tk.Entry(data_frame,bg="grey25", fg="white",font=('Arial',10),width = 20)
                 fitname.place(x=10,y=230)
 
                 global polyentry, waveentry
-                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
+                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
                 tk.Label(data_frame,bg="grey25", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
                 polyentry = tk.Entry(data_frame,bg='black',fg='white',width=3,borderwidth=0,font=('Arial',10))
                 polyentry.insert(0, '5')
@@ -727,7 +721,7 @@ class plotwindow:
                 waveentry.insert(0, '')
                 waveentry.place(x=10,y=259)
 
-                exportdata = tk.Button(data_frame,text='export', bg="grey25", fg="white",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=240,y=90)
+                exportdata = tk.Button(data_frame,text='export', bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=240,y=90)
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
 
             def change_json(dataname):
