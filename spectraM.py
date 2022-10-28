@@ -524,10 +524,10 @@ class plotwindow:
             global gridbox,delimiteropt,delimitervar
 
             tk.Label(self.toolframe,bg='grey25',text='x:',font=('Arial',10),fg='white').place(x=10,y=100)
-            xlow = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',10))
+            xlow = tk.Entry(self.toolframe,bg='black',fg='white',width=12,borderwidth=0,font=('Arial',10))
             xlow.insert(0,float(init_dict['xlow']))
             xlow.place(x=25,y=110)
-            xhigh = tk.Entry(self.toolframe,bg='black',width=12,borderwidth=0,font=('Arial',10))
+            xhigh = tk.Entry(self.toolframe,bg='black',fg='white',width=12,borderwidth=0,font=('Arial',10))
             xhigh.insert(0,float(init_dict['xhigh']))
             xhigh.place(x=25,y=90)
 
@@ -585,7 +585,7 @@ class plotwindow:
                 scrollbar.config(command = listbox.yview)
 
                 global container
-                container = tk.Frame(self.toolframe, borderwidth=2, relief="ridge")
+                container = tk.Frame(self.toolframe, borderwidth=2,bg='grey25', relief="ridge")
                 container.place(x= 25,y=330,width=320,height=310)
 
                 RES_LIST = [0.1,0.01,0.001,0.0001]
@@ -711,7 +711,7 @@ class plotwindow:
 
                 global polyentry, waveentry
                 polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
-                tk.Label(data_frame,bg="grey25", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
+                tk.Label(data_frame,bg="black", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
                 polyentry = tk.Entry(data_frame,bg='black',fg='white',width=3,borderwidth=0,font=('Arial',10))
                 polyentry.insert(0, '5')
                 polyentry.place(x=190,y=259)
