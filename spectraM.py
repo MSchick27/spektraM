@@ -1,6 +1,6 @@
 #from ast import Delete
-#import tkinter as tk
-import tkmacosx as tk
+import tkinter as tk
+#import tkmacosx as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 
@@ -62,7 +62,7 @@ class plotwindow:
         self.ax[1].set_xlabel(init_dict['xlabel'])
         self.ax[1].set_ylabel(init_dict['ylabel'])
     
-        self.mframe.place(x=400,y=0,width=900,height=35)
+        self.mframe.place(x=420,y=0,width=900,height=35)
 
 
     def plot(self):
@@ -513,10 +513,10 @@ class plotwindow:
             clearbutton =tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
             axisbutton = tk.Button(self.toolframe,bg='grey25',fg='darkred',borderwidth=0,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
             #trailsbutton =tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='trails', command=buttoncommands.trails).place(x=280,y=200)
-            loadjson = tk.Button(self.toolframe,bg='grey25',fg='darkred',font=('Arial',10),borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
-            loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=280)
-            deldata = tk.Button(self.toolframe,image=washer, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=280)
-            exjson = tk.Button(self.toolframe,image=export, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=280)
+            loadjson = tk.Button(self.toolframe,bg='grey80',fg='darkred',font=('Arial',10),borderwidth=0,text='json', command=buttoncommands.load_json).place(x=280,y=230)
+            loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=270)
+            deldata = tk.Button(self.toolframe,image=washer, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=270)
+            exjson = tk.Button(self.toolframe,image=export, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=270)
         
         def inputset():
             global xlow,xhigh,ylow,yhigh
@@ -567,7 +567,7 @@ class plotwindow:
             delimitervar.set(delimiteroptions[0])
             delimiteropt = tk.OptionMenu(self.toolframe, delimitervar, *delimiteroptions)
             delimiteropt.config(width=3,font=('Arial',10),bg='grey25',fg='white')
-            delimiteropt.place(x=280,y=305)
+            delimiteropt.place(x=280,y=295)
 
         class scrollframe:
             def __init__():
@@ -651,7 +651,7 @@ class plotwindow:
                 subplotopt.config(font=('Arial',10),bg='grey25',fg='white')
                 subplotopt.place(x=10,y=55,width=30)
 
-                labelchangebutton = tk.Button(data_frame,text='->', bg='grey25',fg='darkred',font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
+                labelchangebutton = tk.Button(data_frame,text='->', bg='grey80',fg='darkred',font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.change_key(dataname)).place(x=240,y=7)
 
 #2. row---------------------------------------------------------
                 global bgbox,bgkeyentry, scales, scales_res
@@ -680,7 +680,7 @@ class plotwindow:
                 scales = tk.Scale(data_frame,orient='horizontal',bg="grey25",font=('Arial',10),from_= -0.5, to=1.6,resolution=scales_res.get(),length =90,width=10,sliderlength=20,fg='sky blue')
                 scales.set(float(jsondict[str(dataname)]['bgscale']))
                 scales.bind("<ButtonRelease-1>",scrollframe.change_json(dataname))
-                scales.place(x=225,y=55)
+                scales.place(x=220,y=60)
 
 
 #3. row---------------------------------------------------------
@@ -695,22 +695,22 @@ class plotwindow:
                 
               
 #last. row---------------------------------------------------------
-                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
+                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey80", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
 
 
                 global ftype,fitname
-                fitdata = tk.Button(data_frame,text='FIT',bg="grey25", fg="darkred",font=('Arial',10) ,borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
+                fitdata = tk.Button(data_frame,text='FIT',bg="grey80", fg="darkred",font=('Arial',10) ,borderwidth=0, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
                 ftype = tk.StringVar()
                 ftypeoptions = ['Gauss','Lorentz']
                 ftype.set(ftypeoptions[0])
                 ftypeopt = tk.OptionMenu(data_frame, ftype, *ftypeoptions)
                 ftypeopt.config(bg='grey25',fg='white',font=('Arial',10))
                 ftypeopt.place(x=165,y=232,width=70)
-                fitname = tk.Entry(data_frame,bg="grey25", fg="white",font=('Arial',10),width = 20)
+                fitname = tk.Entry(data_frame,bg="black", fg="white",font=('Arial',10),width = 20)
                 fitname.place(x=10,y=230)
 
                 global polyentry, waveentry
-                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
+                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey80", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
                 tk.Label(data_frame,bg="black", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
                 polyentry = tk.Entry(data_frame,bg='black',fg='white',width=3,borderwidth=0,font=('Arial',10))
                 polyentry.insert(0, '5')
@@ -721,7 +721,7 @@ class plotwindow:
                 waveentry.insert(0, '')
                 waveentry.place(x=10,y=259)
 
-                exportdata = tk.Button(data_frame,text='export', bg="grey25", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=240,y=90)
+                exportdata = tk.Button(data_frame,text='export', bg="grey80", fg="darkred",font=('Arial',10),borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=250,y=100)
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
 
             def change_json(dataname):
