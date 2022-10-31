@@ -4,6 +4,7 @@ Software is still in progress         so be aware of error or updates to occure 
 
 All files except the project.json and Readme files are important for the software to run without problems.
 
+
 pip install -r requirements.txt
 
 packages which are relevant for the python Code are:
@@ -22,6 +23,10 @@ Press Button and press twice on the canvas to set ax-limits
 Confirm points with left or middle mouse button
 Right click deletes points
 
+
+
+
+---------------------------------Further Things:---------------------------------
 Author:
 Maximilian Schick
 
@@ -31,4 +36,7 @@ pyinstaller --noconfirm --onefile --windowed
 --add-data "PATH spektraM/initval:initval/" 
 --add-data "PATH irspectra:irspectra/" 
 --add-data "PATH spektraM/pics:pics/" 
-"/Users/mschick/Desktop/Bachelor/AKB/Python Projects/spektraM/spectraM.py"
+"PATH spectraM.py"
+
+
+pip freeze creates requirements.txt
