@@ -1,4 +1,3 @@
-#from ast import Delete
 import tkinter as tk
 #import tkmacosx as tk
 from tkinter import filedialog, ttk, messagebox
@@ -15,6 +14,7 @@ import matplotlib.pyplot as plt
 
 
 from irspectra import *
+from irspectra import dimension2
 from fitwindow import *
 
 import os
@@ -159,6 +159,12 @@ class plotwindow:
             def test():
                 print('click')
 
+            def dimension2():
+                plt.close()
+                root1.destroy()
+                dimension2.d2analyzer()
+
+
             def plotplot():
                 scrollframe.change_json(datalistbox)
                 plotwindow.plot(self)
@@ -285,6 +291,7 @@ class plotwindow:
                 scales.configure(resolution= scales_res.get())
 
             def findpeaks(data):
+                prom = float(promentry.get())
                 x = list(jsondict[data]['xdata'])
                 y = list(jsondict[data]['ydata'])
                 num = int(jsondict[data]['subplot'])
@@ -298,7 +305,7 @@ class plotwindow:
                 
                 yarr = np.array(y)
                 #print(y)
-                peaks,_ = signal.find_peaks(yarr,prominence=0.0005)#height=0.001)
+                peaks,_ = signal.find_peaks(yarr,prominence=prom)#height=0.001)
                 print(peaks,_)
                 xpeaks = []
                 ypeaks = []
@@ -517,7 +524,8 @@ class plotwindow:
             loaddata = tk.Button(self.toolframe,image=arrow, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.load_data).place(x=280,y=270)
             deldata = tk.Button(self.toolframe,image=washer, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.delete_data).place(x=305,y=270)
             exjson = tk.Button(self.toolframe,image=export, bg='grey25',fg='white',borderwidth=0, command=buttoncommands.export_json).place(x=330,y=270)
-        
+            d2plot = tk.Button(self.toolframe,bg='grey90',fg='darkred',font=('Arial',10),borderwidth=1,text='2D', command=buttoncommands.dimension2).place(x=300,y=25)
+
         def inputset():
             global xlow,xhigh,ylow,yhigh
             global xlabel,ylabel,titleentry, ymulti
@@ -695,6 +703,10 @@ class plotwindow:
                 
               
 #last. row---------------------------------------------------------
+                global promentry
+                promentry = tk.Entry(data_frame,bg='black',fg='white',width=8,borderwidth=0,font=('Arial',10))
+                promentry.insert(0, '0.0005')
+                promentry.place(x=250,y=180)
                 peakbutton = tk.Button(data_frame,text='Peaks',bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
 
 
@@ -717,7 +729,7 @@ class plotwindow:
                 polyentry.place(x=200,y=259)
 
                 #polymanfitdata = tk.Button(data_frame,text='pol-man', bg='grey25',borderwidth=0, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=220,y=280)
-                waveentry = tk.Entry(data_frame,bg='black',fg='white',width=16,borderwidth=0,font=('Arial',10))
+                waveentry = tk.Entry(data_frame,bg='black',fg='white',width=18,borderwidth=0,font=('Arial',10))
                 waveentry.insert(0, '')
                 waveentry.place(x=10,y=259)
 
@@ -751,5 +763,9 @@ class plotwindow:
 
 #%%Initiation
 
+
 plotwindow()
+
+
+
 
