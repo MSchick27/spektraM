@@ -83,18 +83,24 @@ def import_dpt(low_wav, high_wav, data_path):
     return darray
 
 def import_data(data_path,delimit):
-    data = open(data_path,'r')
+    data = open(data_path,'r',encoding='utf-8-sig')
     data = data.readlines()
     x = []
     y = []
     for item in data:
-        seg = item.index(delimit)
+        it = item.split(str(delimit))
+        x.append(float(it[0].strip()))
+        y.append(float(it[-1].strip()))
+        
+        
+        """ seg = item.index(delimit)
         wavestr = item[0:seg]
         wavenum = float(wavestr)
         x.append(wavenum)
         absorb = item[seg:int(len(item)-1)] #10->11 wenn ir
         absorbnum = float(absorb) 
-        y.append(absorbnum)
+        y.append(absorbnum) """
+
     return x,y
 
 def substract_bg(x,y,xbg,ybg,scale):

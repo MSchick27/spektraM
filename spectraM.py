@@ -245,12 +245,15 @@ class plotwindow:
                 dataname = os.path.basename(datapath)
                 print('new data appended to json')
                 delimiter = str(delimitervar.get())
+                print(str(delimiter))
                 
                 if delimiter == 'tab':
                     print('tab')
                     x,y = import_data(datapath,'\t')
                 if delimiter == 'space':
                     x,y = import_data(datapath,' ')
+                if delimiter == ';':
+                    x,y = import_data(datapath,';')
                 
                 dataset = {'xdata': x,
                             'ydata': y,
