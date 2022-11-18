@@ -322,11 +322,7 @@ class plotwindow:
                 self.ax[num].scatter(xpeaks,ypeaks,marker='x',color='r')
                 self.canvas.draw()
 
-
-
-
-            def export_data(data):
-                a = filedialog.asksaveasfilename(initialdir = dirpath,title = "Save file")#,filetypes = (("textfiles", "*.txt*"))) 
+            def getxy(data):
                 x = list(jsondict[data]['xdata'])
                 y = list(jsondict[data]['ydata'])
                 bgdatakey = jsondict[data]['bgkey']
@@ -335,6 +331,12 @@ class plotwindow:
                     ybg= list(jsondict[bgdatakey]['ydata'])
                     scale = float(jsondict[data]['bgscale'])
                     x,y = substract_bg(x,y,xbg,ybg,scale)
+                return x,y
+
+
+            def export_data(data):
+                a = filedialog.asksaveasfilename(initialdir = dirpath,title = "Save file")#,filetypes = (("textfiles", "*.txt*"))) 
+                x,y = buttoncommands.getxy(data)    #####
 
                 newfile = open(a,'w')
                 for i in range(len(x)):
@@ -429,14 +431,7 @@ class plotwindow:
 
 
             def fit_data(data):
-                x = list(jsondict[data]['xdata'])
-                y = list(jsondict[data]['ydata'])
-                bgdatakey = jsondict[data]['bgkey']
-                if jsondict[data]['bg'] == True:
-                    xbg= list(jsondict[bgdatakey]['xdata'])
-                    ybg= list(jsondict[bgdatakey]['ydata'])
-                    scale = float(jsondict[data]['bgscale'])
-                    x,y = substract_bg(x,y,xbg,ybg,scale)
+                x,y = buttoncommands.getxy(data)
 
                 tpoints = plt.ginput(n=3,timeout=30, show_clicks=True, mouse_add = plt.MouseButton.LEFT,mouse_pop= plt.MouseButton.RIGHT,mouse_stop = plt.MouseButton.MIDDLE)
                 print(tpoints)
@@ -516,6 +511,31 @@ class plotwindow:
                 listbox.insert(tk.END, fname)
                 listbox.insert(tk.END, str(str(fname)+' '+ str(fwhmstr)))
 
+            def sec_dev(data):
+                x,y = buttoncommands.getxy(data)
+                y = np.array(y)
+                dy = np.gradient(y)
+                ddy = np.gradient(dy)
+                ddydump = {'xdata': x,
+                            'ydata': ddy ,
+                            'bg': False,
+                            'bgkey':'',
+                            'bgscale': 0,
+                            'show': True,       #defaults
+                            'color': 'grey',    #...
+                            'linewidth': 0.9 ,
+                            'linestyle':'solid',
+                            'label':str('Second dev of:'+str(data)) ,
+                            'subplot': 1         
+                            }
+
+                datadump = str(data+'_sec dev')
+                counter=0
+                while datadump in jsondict:
+                    counter = counter+1
+                    datadump = str(datadump + str(counter))
+                jsondict[datadump] = ddydump
+                listbox.insert(tk.END, datadump)
 
 
         def buttonset():
@@ -738,6 +758,10 @@ class plotwindow:
 
                 exportdata = tk.Button(data_frame,text='export', bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.export_data(dataname)).place(x=250,y=100)
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
+
+
+                secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=250,y=275)
+
 
             def change_json(dataname):
                 jsondict[dataname]['show']= bool(showbox.get())
