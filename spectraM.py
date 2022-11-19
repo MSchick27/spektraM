@@ -28,6 +28,23 @@ init_dict = init()
 jsondict = {}
 import json
 
+class dataconstruct():
+    def j_son(x,y,bg,bgkey,bgscale,show,col,lwidth,lstyle,lab,subpl):
+        dataset = {'xdata': x,
+                    'ydata': y,
+                    'bg': False,
+                    'bgkey':'',
+                    'bgscale': 0,
+                    'show': True,       #defaults
+                    'color': 'black',    #...
+                    'linewidth': 0.9 ,
+                    'linestyle':'solid',
+                    'label':"import" ,
+                    'subplot': 0         
+                            }
+        return dataset
+
+
 class plotwindow:
     def __init__(self):
         global root1
@@ -254,21 +271,8 @@ class plotwindow:
                     x,y = import_data(datapath,' ')
                 if delimiter == ';':
                     x,y = import_data(datapath,';')
-                
-                dataset = {'xdata': x,
-                            'ydata': y,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'black',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'solid',
-                            'label':"import" ,
-                            'subplot': 0         
-                            }
 
-                
+                dataset = dataconstruct.j_son(x,y,False,'',0,True,'black',0.9,'solid','import',0)
                 counter=0
                 while dataname in jsondict:
                     counter = counter+1
@@ -383,20 +387,8 @@ class plotwindow:
                     for i in range(len(xdatapoly)):
                         yval = polyfunk(xdatapoly[i])
                         ydatapoly.append(yval)
-                    
-                    polyset = {'xdata': xdatapoly,
-                            'ydata': list(polyfunk(xdatapoly)) ,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'grey',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'dashed',
-                            'label':str('Polyfit') ,
-                            'subplot': 0         
-                            }
-                    
+
+                    polyset =  dataconstruct.j_son(xdatapoly,list(polyfunk(xdatapoly)),False,'',0,True,'grey',0.9,'dashed',str('Polyfit'),0)
                     datapol = str(data+'_polyfit')
                     counter=0
                     while datapol in jsondict:
@@ -406,19 +398,7 @@ class plotwindow:
                     jsondict[datapol] = polyset
                     listbox.insert(tk.END, datapol)
                     
-                    doubledset = {'xdata': xdatapoly,
-                            'ydata': ydatad ,
-                            'bg': True,
-                            'bgkey':str(str(data)+'_polyfit'),
-                            'bgscale': 1,
-                            'show': True,       #defaults
-                            'color': 'darkorange',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'solid',
-                            'label':str('Data for substraktion') ,
-                            'subplot': 0         
-                            }
-                    
+                    doubledset =  dataconstruct.j_son(xdatapoly,ydatad,True,str(str(data)+'_polyfit'),1,True,'darkorange',0.9,'solid',str('Data for substraktion'),0)
                     datadub = str(data+'_data')
                     counter=0
                     while datadub in jsondict:
@@ -455,18 +435,7 @@ class plotwindow:
                     w = abs(par[2]) *2
                     xfwhm1 = par[1] - w/2
                     xfwhm2 = par[1] + w/2
-                    fwhmset = {'xdata': [xfwhm1,xfwhm2],
-                            'ydata': [yfwhm,yfwhm] ,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'grey',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'dashed',
-                            'label':str('FWHM:'+str(round(w,3))) ,
-                            'subplot': 0         
-                            }
+                    fwhmset = dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dashed',str('FWHM:'+str(round(w,3))),1)
 
                 if fittype == 'Lorentz':
                     fitx, fity,parstr,par = lorentzfit(x,y,amp,xpeak,width,height)
@@ -474,33 +443,10 @@ class plotwindow:
                     w = abs(par[2]) *2
                     xfwhm1 = par[1] - w/2
                     xfwhm2 = par[1] + w/2
-                    fwhmset = {'xdata': [xfwhm1,xfwhm2],
-                            'ydata': [yfwhm,yfwhm] ,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'grey',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'dotted',
-                            'label':str('FWHM:'+str(round(w,3))) ,
-                            'subplot': 0         
-                            }
-                    
+                    fwhmset =  dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dotted',str('FWHM:'+str(round(w,3))),1)     
 
                 
-                dataset = {'xdata': fitx,
-                            'ydata': fity,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'red',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'solid',
-                            'label':str(fname) ,
-                            'subplot': 0         
-                            }
+                dataset = dataconstruct.j_son(fitx,fity,False,'',0,True,'red',0.9,'solid',str(fname),1)
 
                 #statustask.configure(text=str(parstr),fg='magenta')
                 statusbox.insert(0, str(parstr))
@@ -516,18 +462,7 @@ class plotwindow:
                 y = np.array(y)
                 dy = np.gradient(y)
                 ddy = np.gradient(dy)
-                ddydump = {'xdata': x,
-                            'ydata': ddy ,
-                            'bg': False,
-                            'bgkey':'',
-                            'bgscale': 0,
-                            'show': True,       #defaults
-                            'color': 'grey',    #...
-                            'linewidth': 0.9 ,
-                            'linestyle':'solid',
-                            'label':str('Second dev of:'+str(data)) ,
-                            'subplot': 1         
-                            }
+                ddydump = dataconstruct.j_son(x,ddy,False,'',0,True,'green',0.9,'solid',str('Second dev of:'+str(data)),1)
 
                 datadump = str(data+'_sec dev')
                 counter=0
@@ -540,7 +475,7 @@ class plotwindow:
 
         def buttonset():
             plotbutton =tk.Button(self.toolframe,image=PLOTT,borderwidth=0 ,fg='skyblue',bg='grey25',command=buttoncommands.plotplot).place(x=10,y=20)
-            clearbutton =tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
+            clearbutton=tk.Button(self.toolframe,bg='grey25',fg='white',borderwidth=0,image=CLEAR, command=buttoncommands.clearplot).place(x=180,y=25)
             axisbutton = tk.Button(self.toolframe,bg='grey90',fg='darkred',borderwidth=1,text='axis', command=buttoncommands.set_ax).place(x=290,y=95)
             #trailsbutton =tk.Button(self.toolframe,bg='grey25',borderwidth=0,text='trails', command=buttoncommands.trails).place(x=280,y=200)
             loadjson = tk.Button(self.toolframe,bg='grey90',fg='darkred',font=('Arial',10),borderwidth=1,text='json', command=buttoncommands.load_json).place(x=280,y=230)
