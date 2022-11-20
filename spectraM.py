@@ -33,14 +33,14 @@ class dataconstruct():
         dataset = {'xdata': x,
                     'ydata': y,
                     'bg': False,
-                    'bgkey':'',
-                    'bgscale': 0,
-                    'show': True,       #defaults
-                    'color': 'black',    #...
-                    'linewidth': 0.9 ,
-                    'linestyle':'solid',
-                    'label':"import" ,
-                    'subplot': 0         
+                    'bgkey':bgkey,
+                    'bgscale': bgscale,
+                    'show': show,       #defaults
+                    'color': col,    #...
+                    'linewidth': lwidth,
+                    'linestyle':lstyle,
+                    'label':lab ,
+                    'subplot': subpl         
                             }
         return dataset
 
@@ -361,12 +361,14 @@ class plotwindow:
                     waveval = waveentry.get()
                     xpoly = list(waveval.split(','))
                     if waveval =='':
+                        statusbox.insert(0, 'Press 4 times on the plot')
                         polypoints = plt.ginput(n=5,timeout=30, show_clicks=True, mouse_add = plt.MouseButton.LEFT,mouse_pop= plt.MouseButton.RIGHT,mouse_stop = plt.MouseButton.MIDDLE)
                         xpoly = [polypoints[0][0],polypoints[1][0],polypoints[2][0],polypoints[3][0]]
 
                     xpoly = [float(item) for item in xpoly]
                     xpoly.sort()
                     statusbox.insert(0, str(xpoly))
+                    waveentry.insert(0,str(xpoly))
                     print(xpoly)
 
                     x = list(jsondict[data]['xdata'])
@@ -398,7 +400,7 @@ class plotwindow:
                     jsondict[datapol] = polyset
                     listbox.insert(tk.END, datapol)
                     
-                    doubledset =  dataconstruct.j_son(xdatapoly,ydatad,True,str(str(data)+'_polyfit'),1,True,'darkorange',0.9,'solid',str('Data for substraktion'),0)
+                    doubledset =  dataconstruct.j_son(xdatapoly,ydatad,True,str(str(data)+'_polyfit'),1,True,'darkorange',0.9,'solid',str('Data for substraktion'),1)
                     datadub = str(data+'_data')
                     counter=0
                     while datadub in jsondict:
@@ -461,7 +463,7 @@ class plotwindow:
                 x,y = buttoncommands.getxy(data)
                 y = np.array(y)
                 dy = np.gradient(y)
-                ddy = np.gradient(dy)
+                ddy = list(np.gradient(dy))
                 ddydump = dataconstruct.j_son(x,ddy,False,'',0,True,'green',0.9,'solid',str('Second dev of:'+str(data)),1)
 
                 datadump = str(data+'_sec dev')
@@ -471,6 +473,31 @@ class plotwindow:
                     datadump = str(datadump + str(counter))
                 jsondict[datadump] = ddydump
                 listbox.insert(tk.END, datadump)
+
+            def cut(data):
+                x,y = buttoncommands.getxy(data)
+                wavecut = wavecutentry.get()
+                xcut = list(wavecut.split(','))
+                if wavecut == '':
+                    statusbox.insert(0, 'Press 2 times on the plot')
+                    polypoints = plt.ginput(n=2,timeout=30, show_clicks=True, mouse_add = plt.MouseButton.LEFT,mouse_pop= plt.MouseButton.RIGHT,mouse_stop = plt.MouseButton.MIDDLE)
+                    xcut = [polypoints[0][0],polypoints[1][0]]
+                
+                xcut = [float(item) for item in xcut]
+                xcut.sort()
+                statusbox.insert(0, str(xcut))
+
+                xredcut,yredcut = data_red(x,y,xcut[0],xcut[1])
+                cutteddata =  dataconstruct.j_son(xredcut,yredcut,False,'',0,True,'magenta',0.9,'solid',str('Data cut out'),1)
+                datadump = str(data+'_cut')
+                counter=0
+                while datadump in jsondict:
+                        counter = counter+1
+                        datadump = str(datadump + str(counter))
+
+                jsondict[datadump] = cutteddata
+                listbox.insert(tk.END, datadump)
+
 
 
         def buttonset():
@@ -665,11 +692,11 @@ class plotwindow:
                 promentry = tk.Entry(data_frame,bg='black',fg='white',width=8,borderwidth=0,font=('Arial',10))
                 promentry.insert(0, '0.0005')
                 promentry.place(x=250,y=180)
-                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
+                peakbutton = tk.Button(data_frame,text='Peaks',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
 
 
                 global ftype,fitname
-                fitdata = tk.Button(data_frame,text='FIT',bg="grey90", fg="darkred",font=('Arial',10) ,borderwidth=1, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
+                fitdata = tk.Button(data_frame,text='FIT',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
                 ftype = tk.StringVar()
                 ftypeoptions = ['Gauss','Lorentz']
                 ftype.set(ftypeoptions[0])
@@ -680,7 +707,7 @@ class plotwindow:
                 fitname.place(x=10,y=230)
 
                 global polyentry, waveentry
-                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
+                polyfitdata = tk.Button(data_frame,text='polyFIT', bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.polyfit_data(dataname)).place(x=250,y=255)
                 tk.Label(data_frame,bg="black", fg="white",font=('Arial',10),text='Polyfit deg:').place(x=130,y=259)
                 polyentry = tk.Entry(data_frame,bg='black',fg='white',width=3,borderwidth=0,font=('Arial',10))
                 polyentry.insert(0, '5')
@@ -695,8 +722,12 @@ class plotwindow:
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
 
 
-                secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=250,y=275)
-
+                global wavecutentry
+                secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=250,y=280)
+                cut_out = tk.Button(data_frame,text='Cut',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.cut(dataname)).place(x=140,y=280)
+                wavecutentry = tk.Entry(data_frame,bg='black',fg='white',width=18,borderwidth=0,font=('Arial',10))
+                wavecutentry.insert(0, '')
+                wavecutentry.place(x=10,y=280)
 
             def change_json(dataname):
                 jsondict[dataname]['show']= bool(showbox.get())
