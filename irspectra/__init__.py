@@ -114,6 +114,11 @@ def substract_bg(x,y,xbg,ybg,scale):
     
     return newx, newy
 
+def turnaround(x,y):
+    newx = x
+    y = np.array(y)
+    newy = list(-1*y)
+    return newx, newy
 
 #Korrektur des Datensatzes um Hintergrund
 def backgroundwash(low_wav,high_wav,data_2d_array,background_path,scale):

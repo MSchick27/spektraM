@@ -51,7 +51,7 @@ class plotwindow:
         root1 = tk.Tk()
         root1.title('Plotting GUI')
         root1.geometry('1300x700')
-        root1.configure(background='grey25')
+        root1.configure(background='grey20')
         plotwindow.init_toolbar(self)
         plotwindow.init_plotframe(self)
 
@@ -66,7 +66,7 @@ class plotwindow:
 
     def init_plotframe(self): 
         self.mframe = tk.Frame(root1)
-        self.mframe.config(background='grey25')
+        self.mframe.config(background='grey20')
 
         figure, self.ax = plt.subplots(2,1,gridspec_kw={'height_ratios': [2, 1]},figsize=(12,8))
         self.canvas = FigureCanvasTkAgg(figure, master= root1)#self.mframe)
@@ -134,12 +134,12 @@ class plotwindow:
 
     def init_toolbar(self):
         global statusbox
-        self.toolframe = tk.Frame(root1, borderwidth=2, relief="ridge",bg='grey20', width=400)#
+        self.toolframe = tk.Frame(root1, borderwidth=2, relief="ridge",bg='grey20', width=415)#
         tk.Label(self.toolframe,text='Toolbar:',font=('Arial',11),fg='white',bg='grey25',width = 55).place(x=0,y=0)
 
         #statustask = tk.Label(self.toolframe ,text='root',font=('Courier',10),bg ='white',fg='black',width=60,height=2)
         #statustask.pack(anchor = "w", side = "bottom")
-        commandframe = tk.Frame(self.toolframe, borderwidth=2, relief="ridge", width=400)
+        commandframe = tk.Frame(self.toolframe, borderwidth=2, relief="ridge", width=415)
         commandframe.pack(anchor = "w", side = "bottom")
         statusbox = tk.Listbox(commandframe,font=('Courier',10),bg ='white',fg='black',width=60,height=4)
                 #listbox.pack(side = tk.LEFT, fill = tk.BOTH)
@@ -498,6 +498,20 @@ class plotwindow:
                 jsondict[datadump] = cutteddata
                 listbox.insert(tk.END, datadump)
 
+            def invertdata(data):
+                x,y = buttoncommands.getxy(data)
+                nx,ny = turnaround(x,y)
+                jsondict[data]['xdata']= nx
+                jsondict[data]['ydata']= ny
+                statusbox.insert(0, 'data inverted: '+str(data))
+                buttoncommands.plotplot()
+
+
+
+
+
+
+
 
 
         def buttonset():
@@ -689,10 +703,13 @@ class plotwindow:
               
 #last. row---------------------------------------------------------
                 global promentry
+                tk.Label(data_frame,bg='grey25',text='Prominence:',font=('Arial',10),fg='white').place(x=170,y=180)
                 promentry = tk.Entry(data_frame,bg='black',fg='white',width=8,borderwidth=0,font=('Arial',10))
                 promentry.insert(0, '0.0005')
                 promentry.place(x=250,y=180)
                 peakbutton = tk.Button(data_frame,text='Peaks',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
+                invert = tk.Button(data_frame,text='invt.',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.invertdata(dataname)).place(x=170,y=200)
+
 
 
                 global ftype,fitname
@@ -742,20 +759,15 @@ class plotwindow:
                 #print(jsondict)
 
 
-                
-
-        
         imageset()
         buttonset()
         inputset()
         scrollframe.__init__()
-        
         self.toolframe.pack(side= tk.LEFT, fill=tk.Y, expand=0, anchor= tk.S)
         
 
 
 #%%Initiation
-
 
 plotwindow()
 
