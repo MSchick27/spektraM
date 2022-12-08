@@ -114,6 +114,20 @@ def substract_bg(x,y,xbg,ybg,scale):
     
     return newx, newy
 
+def data_red2(x,y,xl,xh):
+    x = list(x)
+    xnew=[]
+    ynew=[]
+    for c in range(len(x)):
+        if x[c] <= xl:
+            xnew.append(x[c])
+            ynew.append(y[c])
+        if x[c] >= xh:
+            xnew.append(x[c])
+            ynew.append(y[c])
+    return xnew,ynew
+    
+
 def turnaround(x,y):
     newx = x
     y = np.array(y)

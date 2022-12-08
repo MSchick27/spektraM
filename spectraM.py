@@ -439,6 +439,14 @@ class plotwindow:
                     xfwhm2 = par[1] + w/2
                     fwhmset = dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dashed',str('FWHM:'+str(round(w,3))),1)
 
+                if fittype == 'Gauss fine':
+                    fitx, fity,parstr,par = gaussfit_fine(x,y,amp,xpeak,width,height)
+                    yfwhm = par[0]/2 + par[3]
+                    w = abs(par[2]) *2
+                    xfwhm1 = par[1] - w/2
+                    xfwhm2 = par[1] + w/2
+                    fwhmset = dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dashed',str('FWHM:'+str(round(w,3))),1)
+
                 if fittype == 'Lorentz':
                     fitx, fity,parstr,par = lorentzfit(x,y,amp,xpeak,width,height)
                     yfwhm = par[0]/2 + par[3]
@@ -497,6 +505,26 @@ class plotwindow:
 
                 jsondict[datadump] = cutteddata
                 listbox.insert(tk.END, datadump)
+
+            def ignore(data):
+                x,y = buttoncommands.getxy(data)
+                statusbox.insert(0, 'Press 2 times on the plot')
+                polypoints = plt.ginput(n=2,timeout=30, show_clicks=True, mouse_add = plt.MouseButton.LEFT,mouse_pop= plt.MouseButton.RIGHT,mouse_stop = plt.MouseButton.MIDDLE)
+                xp = [polypoints[0][0],polypoints[1][0]]
+                xp = [float(item) for item in xp]
+                xp.sort()
+                nx,ny= data_red2(x,y,xp[0],xp[1])
+                cutteddata =  dataconstruct.j_son(nx,ny,False,'',0,True,'magenta',0.9,'solid',str('Data left'),1)
+                
+                datadump = str(data+'_left')
+                counter=0
+                while datadump in jsondict:
+                        counter = counter+1
+                        datadump = str(datadump + str(counter))
+
+                jsondict[datadump] = cutteddata
+                listbox.insert(tk.END, datadump)
+
 
             def invertdata(data):
                 x,y = buttoncommands.getxy(data)
@@ -711,11 +739,10 @@ class plotwindow:
                 invert = tk.Button(data_frame,text='invt.',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.invertdata(dataname)).place(x=170,y=200)
 
 
-
                 global ftype,fitname
                 fitdata = tk.Button(data_frame,text='FIT',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
                 ftype = tk.StringVar()
-                ftypeoptions = ['Gauss','Lorentz']
+                ftypeoptions = ['Gauss','Lorentz','Gauss fine']
                 ftype.set(ftypeoptions[0])
                 ftypeopt = tk.OptionMenu(data_frame, ftype, *ftypeoptions)
                 ftypeopt.config(bg='grey25',fg='white',font=('Arial',10))
@@ -741,10 +768,14 @@ class plotwindow:
 
                 global wavecutentry
                 secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=250,y=280)
-                cut_out = tk.Button(data_frame,text='Cut',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.cut(dataname)).place(x=140,y=280)
+                cut_out = tk.Button(data_frame,text='Cut',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.cut(dataname)).place(x=120,y=280)
                 wavecutentry = tk.Entry(data_frame,bg='black',fg='white',width=18,borderwidth=0,font=('Arial',10))
                 wavecutentry.insert(0, '')
                 wavecutentry.place(x=10,y=280)
+
+                global ignore
+                ignorebut = tk.Button(data_frame,text='ign',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.ignore(dataname)).place(x=190,y=280)
+                
 
             def change_json(dataname):
                 jsondict[dataname]['show']= bool(showbox.get())

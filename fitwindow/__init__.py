@@ -26,13 +26,26 @@ def gaussfit_data(x,y,amp,xpeak,width,height):
     print(par)
     fitx = x
     fity = []
-    for i in range(len(x)):
+    for i in range(len(fitx)):
         y_val = gauss(x[i],*par)
         fity.append(y_val)
     
     parstring = str('Amp:' + str(round(par[0],3)) + ', xpeak:' + str(round(par[1],3)) +', width:' + str(round(par[2],3)))
     return fitx,fity, parstring, par
+
+def gaussfit_fine(x,y,amp,xpeak,width,height):
+    guess=[amp,xpeak,width,height]
+    print(guess)
+    par,cov = opt.curve_fit(gauss,x,y,guess,maxfev=100000)
+    fitx = np.linspace(x[0],x[-1],2000)
+    fity = []
+    for i in range(len(fitx)):
+        y_val = gauss(fitx[i],*par)
+        fity.append(y_val)
     
+    parstring = str('Amp:' + str(round(par[0],3)) + ', xpeak:' + str(round(par[1],3)) +', width:' + str(round(par[2],3)))
+    return fitx,fity, parstring, par
+
 def gauss(x,a,b,c,g):
     return a*np.exp(-(x-b)**2 / c**2)+g
 
@@ -49,6 +62,7 @@ def lorentzfit(x,y,amp,xpeak,width,height):
 
     parstring = str('Amp:' + str(round(par[0],5)) + ', x:' + str(round(par[1],3)) +', c:' + str(round(par[2],3)) +', FWHM:' + str(round(FWHM(par[2]),2)))
     return fitx,fity,parstring,par
+
 
 def lorentz(x,a,b,c,g):
     return ((a*c**2)/((x-b)**2+c**2)) + g
