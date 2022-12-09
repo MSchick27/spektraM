@@ -95,14 +95,14 @@ class plotwindow:
             farb = str(jsondict[key]['color'])
             bgdatakey = jsondict[key]['bgkey']
             linest = jsondict[key]['linestyle']
-            print(linest)
+            #print(linest)
  
             if jsondict[key]['bg'] == True:
                 xbg= list(jsondict[bgdatakey]['xdata'])
                 ybg= list(jsondict[bgdatakey]['ydata'])
                 scale = float(jsondict[key]['bgscale'])
                 x,y = substract_bg(x,y,xbg,ybg,scale)
-                print('bg substracted')
+                #print('bg substracted')
 
             multi = float(ymulti.get())
             y = [(item*multi) for item in y]
@@ -414,11 +414,12 @@ class plotwindow:
 
             def fit_data(data):
                 x,y = buttoncommands.getxy(data)
-
+                statusbox.insert(0,str('Press 3x: left, peak ,right'))
                 tpoints = plt.ginput(n=3,timeout=30, show_clicks=True, mouse_add = plt.MouseButton.LEFT,mouse_pop= plt.MouseButton.RIGHT,mouse_stop = plt.MouseButton.MIDDLE)
                 print(tpoints)
                 xps = [tpoints[0][0],tpoints[1][0],tpoints[2][0]]
                 yps = [tpoints[0][1],tpoints[1][1],tpoints[2][1]]
+                statusbox.insert(0,str('Points: '+str(round(tpoints[0][0],4))+ str(round(tpoints[1][0],4))+str(round(tpoints[2][0],4))))
                 xh = max(xps)
                 xl = min(xps)
                 width = (xh-xl)/2.4
@@ -429,12 +430,15 @@ class plotwindow:
                 height = min(yps)
                 fittype = ftype.get()
                 fname = fitname.get()
+                if fname =='':
+                    statusbox.insert(0,str('ERR: Please choose a Fitname'))
+                    return
                 x,y = data_red(x,y,xl,xh)
 
                 if fittype == 'Gauss':
                     fitx, fity,parstr,par = gaussfit_data(x,y,amp,xpeak,width,height)
                     yfwhm = par[0]/2 + par[3]
-                    w = abs(par[2]) *2
+                    w = 2*np.sqrt(np.log(2))*abs(par[2])
                     xfwhm1 = par[1] - w/2
                     xfwhm2 = par[1] + w/2
                     fwhmset = dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dashed',str('FWHM:'+str(round(w,3))),1)
@@ -442,7 +446,7 @@ class plotwindow:
                 if fittype == 'Gauss fine':
                     fitx, fity,parstr,par = gaussfit_fine(x,y,amp,xpeak,width,height)
                     yfwhm = par[0]/2 + par[3]
-                    w = abs(par[2]) *2
+                    w = 2*np.sqrt(np.log(2))*abs(par[2])
                     xfwhm1 = par[1] - w/2
                     xfwhm2 = par[1] + w/2
                     fwhmset = dataconstruct.j_son([xfwhm1,xfwhm2],[yfwhm,yfwhm],False,'',0,True,'grey',0.9,'dashed',str('FWHM:'+str(round(w,3))),1)
@@ -736,8 +740,8 @@ class plotwindow:
                 promentry.insert(0, '0.0005')
                 promentry.place(x=250,y=180)
                 peakbutton = tk.Button(data_frame,text='Peaks',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.findpeaks(dataname)).place(x=250,y=200)
-                invert = tk.Button(data_frame,text='invt.',bg="grey90", fg="darkred",font=('Arial',10),width= 6,borderwidth=1, command=lambda:buttoncommands.invertdata(dataname)).place(x=170,y=200)
-
+                invert = tk.Button(data_frame,text='invt.',bg="grey90", fg="darkred",font=('Arial',10),width= 4,borderwidth=1, command=lambda:buttoncommands.invertdata(dataname)).place(x=180,y=200)
+                secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,width= 4,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=110,y=200)
 
                 global ftype,fitname
                 fitdata = tk.Button(data_frame,text='FIT',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.fit_data(dataname)).place(x=250,y=230)
@@ -762,19 +766,19 @@ class plotwindow:
                 waveentry.insert(0, '')
                 waveentry.place(x=10,y=259)
 
-                exportdata = tk.Button(data_frame,text='export', bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.export_data(dataname)).place(x=250,y=100)
+
+
+                exportdata = tk.Button(data_frame,text='export', bg="grey90", fg="darkred",font=('Arial',10),borderwidth=1, command=lambda:buttoncommands.export_data(dataname)).place(x=260,y=100)
                 #peakfindbutton = tk.Button(data_frame,text='export', bg='grey25',borderwidth=0, command=lambda:buttoncommands.export_data(dataname)).place(x=220,y=200)
 
-
                 global wavecutentry
-                secdev = tk.Button(data_frame,text='2.dev',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.sec_dev(dataname)).place(x=250,y=280)
-                cut_out = tk.Button(data_frame,text='Cut',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.cut(dataname)).place(x=120,y=280)
-                wavecutentry = tk.Entry(data_frame,bg='black',fg='white',width=18,borderwidth=0,font=('Arial',10))
+                cut_out = tk.Button(data_frame,text='Cut',bg="grey90", fg="darkred",font=('Arial',10) ,width= 4,borderwidth=1, command=lambda:buttoncommands.cut(dataname)).place(x=120,y=100)
+                wavecutentry = tk.Entry(data_frame,bg='black',fg='white',width=16,borderwidth=0,font=('Arial',10))
                 wavecutentry.insert(0, '')
-                wavecutentry.place(x=10,y=280)
+                wavecutentry.place(x=10,y=100)
 
                 global ignore
-                ignorebut = tk.Button(data_frame,text='ign',bg="grey90", fg="darkred",font=('Arial',10) ,width= 6,borderwidth=1, command=lambda:buttoncommands.ignore(dataname)).place(x=190,y=280)
+                ignorebut = tk.Button(data_frame,text='ign',bg="grey90", fg="darkred",font=('Arial',10) ,width= 4,borderwidth=1, command=lambda:buttoncommands.ignore(dataname)).place(x=190,y=100)
                 
 
             def change_json(dataname):
